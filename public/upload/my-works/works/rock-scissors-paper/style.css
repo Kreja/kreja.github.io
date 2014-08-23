@@ -1,0 +1,47 @@
+body,
+div,
+span,
+img{
+	margin: 0;
+	padding: 0;
+}
+body{
+	text-align: center;
+}
+.outer-wrap{
+	width: 1200px;
+	margin: 20px auto 80px;
+	overflow: hidden;
+}
+.outer{
+	width: 500px;
+	float: left;
+}
+.outer p{
+	font: bold 30px/2 Arial;
+}
+.outer img{
+	width: 300px;
+}
+.res{
+	font: bold 36px/2 Arial;
+	width: 150px;
+	margin-top: 150px;
+	float: left;
+}
+.choice{
+	clear: both;
+}
+button{
+	background: #fff;
+	color: #000;
+	font: bold 16px/2 Arial;
+	text-transform: uppercase;
+	vertical-align: middle;
+	border: 2px solid #000;
+	width: 160px;
+	cursor: pointer;
+}
+button:hover{
+	background: #eee;
+}
