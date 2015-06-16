@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>渊祭</title>
+    <link>http://kreja.github.io/</link>
+    <description>渊祭的博客</description>
+    
+      <item>
+        <title>Grunt 快速使用</title>
+        <link>http://kreja.github.io//2015/03/06/grunt-quick-start.html</link>
+        <guid isPermaLink="true">http://kreja.github.io//2015/03/06/grunt-quick-start.html</guid>
+        <pubDate>Fri, 06 Mar 2015 00:00:00 +0800</pubDate>
+        <description>&lt;h1&gt;Grunt 的使用&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt; 其实只是把别人的整理了一遍 -- &lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3&gt;安装 Grunt&lt;/h3&gt;
+
+&lt;p&gt;通过 yoeman 安装&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;sudo npm install -g yo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;sudo npm install -g grunt-cli
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;新建项目目录、文件&lt;/h3&gt;
+
+&lt;h3&gt;生成 package.json 文件&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;进入项目文件夹，&lt;code&gt;npm init&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;安装 Grunt 和需要的插件&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;npm install grunt --save-dev&lt;/code&gt;
+
+&lt;ul&gt;
+&lt;li&gt;表示通过 npm 安装了 grunt 到当前项目，同时加上了 &lt;code&gt;—save-dev&lt;/code&gt; 参数，表示会把刚安装的东西添加到 package.json 文件中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;需要安装的插件：
+
+&lt;ul&gt;
+&lt;li&gt;合并文件：grunt-contrib-concat&lt;/li&gt;
+&lt;li&gt;语法检查：grunt-contrib-jshint(jshint 在 contact 之后，免得两个文件分开是对的，连接起来又出错了)&lt;/li&gt;
+&lt;li&gt;Scss 编译：grunt-contrib-sass&lt;/li&gt;
+&lt;li&gt;压缩文件：grunt-contrib-uglify&lt;/li&gt;
+&lt;li&gt;监听文件变动：grunt-contrib-watch&lt;/li&gt;
+&lt;li&gt;建立本地服务器：grunt-contrib-connect&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;安装插件&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;npm install --save-dev grunt-contrib-concat grunt-contrib-jshint grunt-contrib-sass grunt-contrib-uglify grunt-contrib-watch grunt-contrib-connect
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;配置 Gruntfile.js 的语法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;所有代码要包裹在
+&lt;code&gt;
+module.exports = function(grunt) {
+  ...
+};
+&lt;/code&gt;
+里面&lt;/li&gt;
+&lt;li&gt;这里与 Grunt 有关的主要有三块代码：任务配置代码、插件加载代码、任务注册代码。&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;任务配置代码&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;调用插件配置一下要执行的任务和实现的功能&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;``&quot;&gt;  grunt.initConfig({
+      pkg: grunt.file.readJSON(&#39;package.json&#39;),//读取 package.json 文件
+      uglify: {//配置 uglify 插件的任务
+          options: {//配置全局 options
+              banner: &#39;/*! &amp;lt;%= pkg.name %&amp;gt; &amp;lt;%= grunt.template.today(&quot;yyyy-mm-dd&quot;) %&amp;gt; */\n&#39;
+          },
+          build: {//建立 build 任务
+              src: &#39;src/&amp;lt;%= pkg.name %&amp;gt;.js&#39;,
+              dest: &#39;build/&amp;lt;%= pkg.name %&amp;gt;.min.js&#39;
+          }
+      }
+  });
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;是对象的格式&lt;/li&gt;
+&lt;li&gt;怎么写 options 里的参数和 build 里的参数内容，要查看每个插件的用法，根据用法编写任务，看&lt;a href=&quot;https://www.npmjs.com/&quot;&gt;官方文档&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;插件加载代码&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;把需要用到的插件加载进来&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;grunt.loadNpmTasks(&#39;grunt-contrib-uglify&#39;);&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;任务注册代码
+
+&lt;ul&gt;
+&lt;li&gt;注册一个 task，里面包含刚在前面编写的任务配置代码&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;grunt.registerTask(&#39;default&#39;, [&#39;uglify&#39;]);&lt;/code&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在 default 上面注册一个 Uglify 任务，default 是别名，它是默认的 task，当你在项目目录执行 grunt 时，它会执行注册到 default 上的任务。也就是说，执行 grunt 命令时，uglify 的所有代码将会执行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;grunt.registerTask(&#39;command&#39;, [&#39;task:subtask&#39;]);&lt;/code&gt;
+
+&lt;ul&gt;
+&lt;li&gt;要输入 grunt command 命令来执行任务，这条任务只执行 task 里的 subtask，比如上面 uglify 里有一个 build 子任务&lt;/li&gt;
+&lt;li&gt;command 不能命名成 task，不能同名&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;项目文件传输与协作&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;package.json 记录了项目中依赖的 grunt 插件，所以不用上传插件，只需要上传这个文件即可。下载下来之后，在这个项目文件夹下面，输入命令 npm install，NPM 会自动读取 package.json 文件，将 grunt 和有关插件下载下来。&lt;/li&gt;
+&lt;li&gt;用 .gitignore 过滤掉这个文件夹，禁止 git 追踪。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;参考&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://yujiangshui.com/grunt-basic-tutorial/&quot;&gt;Grunt 新手一日学会&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+      </item>
+    
+      <item>
+        <title>starry starry night</title>
+        <link>http://kreja.github.io//2014/07/12/starry-starry-night.html</link>
+        <guid isPermaLink="true">http://kreja.github.io//2014/07/12/starry-starry-night.html</guid>
+        <pubDate>Sat, 12 Jul 2014 00:00:00 +0800</pubDate>
+        <description>&lt;blockquote&gt;&lt;p&gt;大二数码摄影课上的PS作业。&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;h2&gt;素材&lt;/h2&gt;
+
+&lt;p&gt;星空图、戏剧人物图、某大图（没错，这是zjg &gt;&amp;lt;）&lt;/p&gt;
+
+&lt;h2&gt;唠叨&lt;/h2&gt;
+
+&lt;p&gt;比较遗憾的就是一开始没有找一张高清的星空图，以至于……&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/public/upload/photography/zjgsky.jpg&quot; alt=&quot;zjgsky&quot; /&gt;&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>人物设计——伪赤练</title>
+        <link>http://kreja.github.io//2014/07/12/red.html</link>
+        <guid isPermaLink="true">http://kreja.github.io//2014/07/12/red.html</guid>
+        <pubDate>Sat, 12 Jul 2014 00:00:00 +0800</pubDate>
+        <description>&lt;blockquote&gt;&lt;p&gt;大二动漫绘画课上的作业。&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;这算是自己创作的，找了很多素材，主要是以秦时明月中的&lt;a href=&quot;http://baike.baidu.com/view/1846320.htm?fr=aladdin&quot;&gt;赤练&lt;/a&gt;为原型啦，诀窍就是拼拼凑凑再改改（小白适用）。&lt;/p&gt;
+
+&lt;p&gt;因为实在太小白，所以ps里的图层到最后都混乱了，所以结果就比较粗糙了。。&lt;/p&gt;
+
+&lt;p&gt;想说真是对不住赤练。。“红莲殿下，我错了！”&lt;/p&gt;
+
+&lt;p&gt;另外的感受就是，自己创作真的比照着画难多了（虽然照着画画的也很挫==）。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/public/upload/painting/red.jpg&quot; alt=&quot;red&quot; /&gt;&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>maya场景建模——温馨的小镇</title>
+        <link>http://kreja.github.io//2014/07/12/maya.html</link>
+        <guid isPermaLink="true">http://kreja.github.io//2014/07/12/maya.html</guid>
+        <pubDate>Sat, 12 Jul 2014 00:00:00 +0800</pubDate>
+        <description>&lt;blockquote&gt;&lt;p&gt;大二场景设计课上的作业，根据一幅图建的模型。&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;/public/upload/painting/maya1.jpeg&quot; alt=&quot;maya1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/public/upload/painting/maya2.jpeg&quot; alt=&quot;maya2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/public/upload/painting/maya3.jpeg&quot; alt=&quot;maya2&quot; /&gt;&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>Luke</title>
+        <link>http://kreja.github.io//2014/07/12/luke.html</link>
+        <guid isPermaLink="true">http://kreja.github.io//2014/07/12/luke.html</guid>
+        <pubDate>Sat, 12 Jul 2014 00:00:00 +0800</pubDate>
+        <description>&lt;blockquote&gt;&lt;p&gt;大二动漫绘画课上的作业。&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;画了好久，幸好Luke真的很养眼。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/public/upload/painting/luke.jpg&quot; alt=&quot;luke&quot; /&gt;&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>女孩</title>
+        <link>http://kreja.github.io//2014/07/12/girl.html</link>
+        <guid isPermaLink="true">http://kreja.github.io//2014/07/12/girl.html</guid>
+        <pubDate>Sat, 12 Jul 2014 00:00:00 +0800</pubDate>
+        <description>&lt;blockquote&gt;&lt;p&gt;豆瓣上的活动——&lt;a href=&quot;http://www.douban.com/online/11618987/&quot;&gt;给我你的照片，让我为你画张肖像2013，爱在深秋版&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;觉得挺有趣的于是就给别人画了一张。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/public/upload/painting/girl.jpg&quot; alt=&quot;girl&quot; /&gt;&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>生活不易，但须坚持</title>
+        <link>http://kreja.github.io//2014/07/09/not-easy-but-carry-on.html</link>
+        <guid isPermaLink="true">http://kreja.github.io//2014/07/09/not-easy-but-carry-on.html</guid>
+        <pubDate>Wed, 09 Jul 2014 00:00:00 +0800</pubDate>
+        <description>&lt;p&gt;从昨天下午起搞这个博客搞到现在，fork了别人的模板，还摸索了好久，终于会发博文了，但还是用不顺，真觉得自己笨啊。&lt;/p&gt;
+
+&lt;p&gt;github都是英文看着真头疼，没办法，好好学英语吧。&lt;/p&gt;
+
+&lt;p&gt;学前端也有好多要学，自己自学最怕就是时间分配不对，慢了学得不够多，快了学得不够好。而且刚开始学，心里总是很急切，最好一下子就都会。&lt;/p&gt;
+
+&lt;p&gt;多跟自己说，不要急不要急，不要急啦，循序渐进，踏实些。&lt;/p&gt;
+
+&lt;p&gt;昨天为了搞这个博客到了两点才睡觉，所以今天的计划都被打乱了，还是决定：按计划行事，到了时间该做什么就做什么。&lt;/p&gt;
+
+&lt;p&gt;生活是挺不容易的，所以要自己寻找乐趣，谁都会遇到困难，能坚持才会胜利。加油！&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>我们都孤独</title>
+        <link>http://kreja.github.io//2014/07/01/we-all-feel-lonely.html</link>
+        <guid isPermaLink="true">http://kreja.github.io//2014/07/01/we-all-feel-lonely.html</guid>
+        <pubDate>Tue, 01 Jul 2014 00:00:00 +0800</pubDate>
+        <description>&lt;blockquote&gt;&lt;p&gt;周围再热闹，但是自己喜欢的人不喜欢自己，就会孤独。大多数人，不都孤独么。&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;觉得又好久没写什么了，哎哟，文笔那么差，可是怎么就那么喜欢写东西呢？真是怪怪的，本身又不是一个爱读书的人，可是就是那么喜欢写点什么。&lt;/p&gt;
+
+&lt;p&gt;其实还有一些私人日记啦，不过虽然这边没有熟人，但还是觉得不方便公开的，哈哈，即使别人并不会关注，但是自己就会想多了，觉得不要公开的好，恩，没有人关注但还是不要公开，哈，哈哈。&lt;/p&gt;
+
+&lt;p&gt;（好像忘了吃晚饭==，先去吃个饭！）&lt;/p&gt;
+
+&lt;p&gt;好啦好啦，回来啦，继续写！有点短路哇，忘了一开始是想写什么来着了。。。&lt;/p&gt;
+
+&lt;p&gt;恩，永恒的主题→&lt;a href=&quot;http://baike.baidu.com/subview/157250/6874106.htm?fr=aladdin&quot;&gt;男神&lt;/a&gt;说“&lt;code&gt;我和大多数人一样，喜欢的人不喜欢我&lt;/code&gt;”。天哪，单单一句“喜欢的人不喜欢我”就够悲伤了好嘛，还要跟大多数人一样，大多数人都这么惨！想想自己应该也是其中一个，要惨一起惨！突然又觉得也还好。不过从男神口中说出这句话，又觉得酸酸的，不是因为我跟男神无缘无分（好啦，稍微有点这个原因啦~），主要是，男神这么优秀，这么难得，简直可以申请当国宝的人，能被他喜欢居然还要拒绝他！不能忍！好想知道那是一个怎样的女子！诶，男神这么好，其实也不想他被谁占有，好到对谁都是一种奢侈的感觉了（稍稍有些不理智&gt;&amp;lt;），可是看到男神一个人吃饭，还无奈地撩撩头发（太销魂，酥了&gt;&amp;lt;~~），还要配上这么沧桑的音乐，简直受不了了。唔，还有，高处不胜寒，以后的路会有很多挑战吧，喜欢你的人越多，黑你的人也就会越多，男神自己都说明明知道不要在意那么多，但还是会难过，是这样的，是这样的（不是手抖多打了一遍，只是，叹气），自己劝自己很难起效……其实想说，这个时候看看那些比你厉害，但是遇到更大挫折的人的事例，围观下别人的痛苦，自己就会好受些，虽然不怎么道义，哈哈。不过，人前越光鲜，夜幕降临的时候独自守着空闺就会愈发孤独吧。诶，我们都孤独。&lt;/p&gt;
+
+&lt;p&gt;觉得世界还真是奇妙，人也很奇妙，拼这拼那，忙上忙下，各有各的性格，各挑各的不爽，凑合着过的过了，凑合不了的散了，身边的永远不爱，爱的总是不在。生活在别处，爱人也在别处，别处别处，身边就只剩下孤独。不过还好，也就多愁善感的时候会这样想想，大多数时候，还是上进啊，懂事啊，以后要更上进，更懂事！因为男神说他喜欢上进，懂事的。想起一句话，为了喜欢的人变得更好，就算以后遇到的不是那个人，心里也会感激吧。噢，还是觉得男神好棒哦，喜欢上进，懂事的人的人，自己也很上进，懂事吧。天呐，不能再多写了，完美得要哭了简直。&lt;/p&gt;
+
+&lt;p&gt;但是，（还是男神说的→）除了房子不一样，其他都一样。&lt;/p&gt;
+
+&lt;p&gt;（最后，为了跟题目呼应一下→）我们都孤独。&lt;/p&gt;
+
+&lt;p&gt;（事实上，题目也是很后来才加的&gt;&amp;lt;，哈哈，哈哈哈哈~~）&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>讲讲我为什么单身</title>
+        <link>http://kreja.github.io//2014/06/17/why-am-i-single.html</link>
+        <guid isPermaLink="true">http://kreja.github.io//2014/06/17/why-am-i-single.html</guid>
+        <pubDate>Tue, 17 Jun 2014 00:00:00 +0800</pubDate>
+        <description>&lt;blockquote&gt;&lt;p&gt;事到如今，还是单身。&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;我特么不想做作业了就想写点什么，搞得自己很文艺的样子，其实也不是写点什么就文艺了啦，
+尤其是像我这种字里行间“特么特么”的人，不过，不经过大脑思考单从反射弧上来讲的话，
+我就觉得写点什么就很文艺了。诶，废话真多。&lt;/p&gt;
+
+&lt;p&gt;这个题目——讲讲我为什么单身，虽然是个热门话题，很多人都在讲，不过他们都是微博上随便几句扯淡的，
+要像我这样写一篇博文来讲，还是得好好讲讲，关键是勇气可嘉，有木有！给自己赞一个先。&lt;/p&gt;
+
+&lt;p&gt;那么我为什么单身呢？外貌这种先天注定无法凭后天努力改变的东西也就没什么好讲了，
+而且这种东西真的要改变也不是很难对吧。自我分析下，还是以事实说话吧。&lt;/p&gt;
+
+&lt;h2&gt;单身的今天&lt;/h2&gt;
+
+&lt;p&gt;就拿今天在食堂的事来说。当时我在吃面呢，右上方就传来一句“嘿”，我肯定不会想到是在跟我打招呼，
+但也挺好奇谁在“嘿”，不过我还是低了个头继续吃，虽然那个面真的不怎么好吃啦。然后他叫了我的名字，
+我才发现，“哦，原来是在跟我打招呼”，一抬头，“啊，同学啊，诶，还是那个我对他有点好感的同学！”
+当然啦，我只是回了声“哦？嗨！”，其中“哦？”是表示意外，“嗨！”是打招呼。然后接下来！没错！就什么都没了，
+各吃各的。好吧，过程比较惨淡就算了吧，结尾还是有机会补上个美好的Bye-Bye拉回几分的。于是乎……没错！
+我又怯场了！我的面快吃完了，我就想“让他先走吧，这样说不说Bye-Bye就是他的事了”，然后我就挑剩下的菜叶吃，
+一片又一片……恨不得把一片撕开来分成好几片吃……但是！等到我实在都没什么好吃的了，他特么还在吃！尼玛！
+吃起来怎毛这么慢！我特么真的没什么好吃的了，才不要傻逼一样地假装在吃！于是说不说Bye-Bye就成了我的事。
+我告诉自己要淡定，恩，然后很顺利地，淡定地站起来，看了他一眼，“诶，在玩手机，那……”然后我就头发甩甩大步地走开了。&lt;/p&gt;
+
+&lt;h2&gt;单身的初中&lt;/h2&gt;
+
+&lt;p&gt;上面是今天的事，说个初中的事吧。&lt;/p&gt;
+
+&lt;p&gt;“什么！为什么单身这种事还要讲到初中去？你特么当年有早恋倾向吗？”&lt;/p&gt;
+
+&lt;p&gt;“想多，初中这种事是作为论据来使我的博文更加丰富的好哇！什么早恋倾向！要说早恋倾向的话，我应该引用幼儿园的事才对。”&lt;/p&gt;
+
+&lt;p&gt;那么接下来让我们乘上时光机飞到美好的初中时代吧！（好白痴）&lt;/p&gt;
+
+&lt;p&gt;整个初中时代我喜欢了最！久！的那个人，每次面对他我都哑口无言……真想拍死自己。比如是这样的：
+自修课上，我稀里哗啦噼里啪啦地跟我同桌讲些乱七八糟的东西，当时我也是个很humor的人啊，
+而且我的humor主要用于夸自己，是的，就是这么不害臊，整天拼了命地夸自己。哈哈！然后我同桌就受不了了，
+于是跟我喜欢的那个人说我讲了好多乱七八糟的东西，我特么怎么这么能讲的，要不要跟他换个座位听我讲讲这些乱七八糟的东西，
+嘿，那个人还真跟他换了座位坐了过来。真是天助我也！真想用我的humor夸我同桌一下啊！当时那个小鹿乱撞得！接下来……没错！
+我特么居然就正襟危坐以前所未有的认真态度投入到了奋笔疾书中，我喜欢的那个人就问我“你刚刚讲了什么？
+为什么我来了你就不讲了？”“恩……哎呀……”我特么不知道怎么回答呀，然后左脑在想要讲些什么humor的东西，
+右脑在想要怎么回答他这个问题。然后……太阳下山了，我的青春小鸟再！也！不！回！来！&lt;/p&gt;
+
+&lt;h2&gt;单身的高中&lt;/h2&gt;
+
+&lt;p&gt;既然都说了初中的事了，那就再讲讲高中的事吧。（诶呀，我好想讲啊，回忆的时候都觉得自己变年轻了~）&lt;/p&gt;
+
+&lt;p&gt;整个高中时代我喜欢了三个人，其中一个就是上面讲到的那个。为了承上启下方便些，我就继续讲他吧。
+从前有个下雨天，羞答答的雨滴静悄悄地下，我和我的哥们（闺蜜啦，不过觉得用哥们比较合适，于她于我都是）
+赶着去食堂吃饭。因为没带伞，所以我们就快走啊快走。就在这时，一把小红伞伸了过来！我转过头，尼玛，他在伞下对我笑啊！
+“要不要撑伞？”“呃……”我特么居然还犹豫！其实心里也是在想“发展机会来了！”不过，接下来我的反应是转回头去叫我那个哥们一起过来撑伞，
+结果，我那哥们已经跑了起来，然后，我特么想也没想就说“不用了”，本着敬职敬业的女汉子精神狂跑起来去追我那哥们，
+其实我一路都在后悔！我想跑回去撑伞啊撑伞！我是一个敬职敬业的女汉子，但我不是一个敬职敬业的暗恋者，
+我怎么可以把喜欢的人独自留在雨中撑伞呢！尼玛，回不去了啊回不去了……&lt;/p&gt;
+
+&lt;p&gt;反正这种事多得我都不好意思再写了，要是再这样，等到我老了，就仰望星空流泪吧。&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>模拟面试观后小记</title>
+        <link>http://kreja.github.io//2014/05/23/note-after-watching-a-mock-interview.html</link>
+        <guid isPermaLink="true">http://kreja.github.io//2014/05/23/note-after-watching-a-mock-interview.html</guid>
+        <pubDate>Fri, 23 May 2014 00:00:00 +0800</pubDate>
+        <description>&lt;blockquote&gt;&lt;p&gt;今天去观摩了一场模拟面试，看看人家是怎么面试的，吸收点经验。&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;我去的时候3号选手正要开始面试，不过3号选手在求职方面并不是很专业的感觉啊，
+面试官问她觉得自己适合marketing还是sales，她很快说了自己适合sales，然后面试官提出了疑问，
+类似于“你不是要XXX，那为什么会选择sales呢？”然后她犹豫了一下，又说“哦，对不起，
+我还是觉得自己比较适合marketing”哈哈哈，现场的观众笑了。&lt;/p&gt;
+
+&lt;p&gt;4号选手倒是挺专业的感觉，穿了一身黑裙，她说“虽然这是模拟面试，但我感觉还是正式一点的好”。
+这里有点感触，之前也纠结过面试要不要穿正装，但又觉得实习嘛，不用很正式啦，诶，
+我总是在这些问题上有纠结，延伸开去，其他方面也是，会想“这里不用这样做吧，不用这么正式吧？
+”所以虽然事先想到了，但又被自己否决掉了，以为这样做是不需要的，以为别人也不会这样做的，
+结果，呵呵，总有人比你更优秀，他们就会做。所以自己怎么想的，做了也不会减分，就做吧，少犹豫了。
+当然黑裙也不是关键啦，4号选手牛在参加了很多比赛，还拿了不错的名次，具有不错的专业素养，
+面试官问她问题，她答得很专业。所以说专业知识还是得靠谱啊，然后行情还是得摸透啊，发展脚步还是得跟上啊。&lt;/p&gt;
+
+&lt;p&gt;5号选手也是很牛的，拥有专利，发表了论文，面试时挺从容的，还一直微笑。她的职业规划做得很好，
+分三个方向：一是券商的科技、传媒、互联网方面的行研，二是外企管培，三是互联网的产品经理。
+面试官建议她先做二，再做一，放弃三，因为互联网是有周期性的（七年？），5号选手发表了一些自己的看法，
+具体忘记了，好像是互联网某方面确实已经达到顶峰，而且现在收购现象严重，小公司发展困难，
+但是某方面还是有很大发展潜力的（诶，忘记是什么方面了。。。）。总之，5号选手说的有些我真的不太懂，
+我的感想是，多关注新闻，关注行业。（说起这个，前天去面试时那个面试官最后也跟我说多关注产品，
+恩，多关注！话说那个面试官怎么只问我简历上的东西，关于产品的都没问。。。谈到实习时间谈不好就泡汤了，
+哪里拿得出全职实习时间啊==）&lt;/p&gt;
+
+&lt;p&gt;还有一个选手居然是大一的，首先就深深地佩服了！面试官也略显尴尬地说“太早了吧”，这时如果是我，
+我很有可能就怯场了，但是那位男生很坚定地说“我觉得这跟年龄没关系”，好样的，学习了，真的不该有任何怯场的想法，
+这是最愚蠢的，即使表现得很稚嫩，也比怯场有勇气。不过，这个男生并不是很稚嫩地就来了，
+他说他现在就在进行一个创业项目（再次深深地佩服）。这里的感想是，年轻不是障碍，年轻是种资本，
+趁着年轻，真的应该多闯闯。&lt;/p&gt;
+
+&lt;p&gt;另外一个选手的话就遇到了一些问题，她想从事供应链方面的工作，但是面试官表示她所选的职位太少了，
+在杭州扳扳手指头就能数清了，大公司才有这样的职位，而且这个职位发展很有瓶颈，即使开始几年就能达到她所说的十六七万，
+但是日后就很难再升上去了，而且这个职业很难跳槽（小公司都没有啊==）。话说回来，
+我现在有意向的一个职业跟这种情况似乎也有点像，之前单纯地觉得“我要做这个职业！”，现在想想，还是应该考虑更周全一些，
+看看发展前景，看看行情。&lt;/p&gt;
+
+&lt;p&gt;总的来说，观摩模拟面试还是挺有收获的，有活动要多参与！争取下次主动当选手，哈哈！&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>做好事可以说</title>
+        <link>http://kreja.github.io//2014/02/26/tell-others-if-u-do-good.html</link>
+        <guid isPermaLink="true">http://kreja.github.io//2014/02/26/tell-others-if-u-do-good.html</guid>
+        <pubDate>Wed, 26 Feb 2014 00:00:00 +0800</pubDate>
+        <description>&lt;blockquote&gt;&lt;p&gt;做了好事说不说，这是个问题……&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;最近发生了一场&lt;a href=&quot;http://www.chinanews.com/yl/2014/02-18/5849065.shtml&quot;&gt;放生风波&lt;/a&gt;，在这里谈一下自己的观点。&lt;/p&gt;
+
+&lt;p&gt;我觉得做了好事是可以说出来的，其实我个人鼓励做了好事说出来，但是没有用“应该说出来”，
+因为我觉得说不说是自己的选择，而且这也不是整件事的重点。重点应该是做好事，不是吗？
+如果关注点在于该不该说出来而忽略了这件事本来的价值，那么就偏移重心了，而事情就变得不太妙了。&lt;/p&gt;
+
+&lt;p&gt;我觉得做了好事说出来，作为一般人可以带动身边的人，作为明星等有影响的人则可以带动更多的人，
+说不定就是这么件小事感化了一个大恶贼什么的，天下之大，谁能肯定没有这么多愁善感容易被感化的大恶贼呢？
+总之，这也算个正能量不是？&lt;/p&gt;
+
+&lt;p&gt;再者，说出来，也可以让大家指点指点。有时虽说自己觉得是做了好事，还被自己感动得一塌糊涂，
+但其实可能好心做了坏事，也有可能确实做了好事，但还有不足之处，做得不够好，那么说出来之后，
+别人觉得哪里不妥，就会提出意见建议，这样不但当事人下次可以做得更好，其他人也能学习到。&lt;/p&gt;
+
+&lt;p&gt;最后，我想说，以前觉得明星一身耀眼，现在越来越觉得他们真是有苦难言。平日里约个会，
+谈个恋爱都要偷偷摸摸，就算戴了口罩帽子，还是躲哪都会被发现，反正大家伙的挖空心思地扒你的隐私，
+但是做了件好事说了出来，大家伙的却又说“炒作！想出名！你该学学谁谁谁做了好事都不说！”艾玛，
+这“作”是一个人能炒得起来的吗？那低调的谁谁谁也不希望你们在这个时候提到他吧？&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>至我最美好的时光</title>
+        <link>http://kreja.github.io//2014/02/06/to-my-best-time.html</link>
+        <guid isPermaLink="true">http://kreja.github.io//2014/02/06/to-my-best-time.html</guid>
+        <pubDate>Thu, 06 Feb 2014 00:00:00 +0800</pubDate>
+        <description>&lt;blockquote&gt;&lt;p&gt;走过很多路，看过很多风景，遇见很多人，听过很多道理，依然不知道最美好的时光应该是怎样的……&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;h2&gt;2013.10.29&lt;/h2&gt;
+
+&lt;p&gt;小平同志（我一大学室友）说“现在这个阶段是一生中最美好的时光，所以……是吧，KL？”
+（吐槽一下，小平同志常常在表达完一个观点后加个“是吧，KL？”，然后我傻傻地“嗯”，
+有时并不一定是表示赞同，只是以“嗯”表示回应，我想小平同志有时也并不是真的在问我吧。）
+我想了想“我不要，最美好的时光就这样啊。”&lt;/p&gt;
+
+&lt;p&gt;然后我该陷入沉思了，最美好的时光，应该是怎样的？&lt;/p&gt;
+
+&lt;h2&gt;2013.11.02&lt;/h2&gt;
+
+&lt;p&gt;之所以看电影&lt;a href=&quot;http://baike.baidu.com/subview/454759/5055365.htm?from_id=3015666&amp;amp;type=syn&amp;amp;fromtitle=%E6%9C%80%E5%A5%BD%E7%9A%84%E9%9D%92%E6%98%A5&amp;amp;fr=aladdin&quot;&gt;《最好的青春》&lt;/a&gt;，是因为它的名字吸引了我，想着也许能从中学习该怎么度过我的青春。
+可我发现他们的青春并不总是阳光灿烂，其实用风吹雨打来形容才适合。作为观众来看，
+这风吹雨打得我心情澎湃，就像在海上，只经历平静就感受不到大海的力量，
+倒是与惊涛骇浪搏斗一番后躺在悠悠的小船中观赏银河，此时享受起大海的平静才更是有滋有味。
+不过这是生活在别处的道理，要真是自己身临其中，我这个人太过胆小，估计能赢得胜利就是奇迹，
+哪还有力气欣赏银河，入梦乡还来不及呢。少年派也就那么几个。&lt;/p&gt;
+
+&lt;p&gt;看电影&lt;a href=&quot;http://baike.baidu.com/view/901595.htm?fr=aladdin&quot;&gt;《我的爱达荷》&lt;/a&gt;倒没有想着和青春有关，而纯粹是因为它的名字。
+曾经的我多少对里面主人公的生活有点不能说向往的向往的，这大概跟年少的叛逆有关吧，
+明明知道那种生活不好，可是你就是觉得很酷，明明人家活得很痛苦，可是你就觉得那才是年少时应该经历的。
+当然我的叛逆基本不在大人面前表现出来，同龄人大概也觉得我很乖吧。其实我是很乖，我想坏但是不敢坏，
+怕一坏就毁一生，就像陈孝正不容一点错误的大楼一样。循规蹈矩让我错过了很多，现在想起来当时坏一点是可以的，
+也有一点点后悔当时太乖了，但现在的我即使知道以后想起来也会觉得现在坏一点是可以的，可是现在还是不敢坏，
+太小心翼翼，太小心翼翼了，小心翼翼到即使知道自己太小心翼翼了但还是不敢放大胆些。真是没出息。&lt;/p&gt;
+
+&lt;p&gt;好几年，跟着我走的一句话就是“&lt;code&gt;生活在别处&lt;/code&gt;”。因为没有身临其中，所以总觉得别处的生活很美好，
+可是当别处不再是别处，又失望地发现原来别处也不过是另一个此地，这样才走过没几处就想回家了。
+所以现在跟着我走的一句话是“&lt;code&gt;我的孤独是杏树上盛开的花朵&lt;/code&gt;”，孤独是跟着我走的，杏树上的花朵也是跟着我走的，
+可我却不敢走了。很多方面，我就是这样渴望尝试，却不敢尝试的人。精彩的青春我撑不到精彩之时，
+叛逆的青春我没勇气承担，我的青春到底该怎样度过？&lt;/p&gt;
+
+&lt;h2&gt;2013.11.08&lt;/h2&gt;
+
+&lt;p&gt;在我这个年龄，没有什么经历，说起“最美好的时光”总觉得就应该是青春时期，也就是现在。
+看到照片上一个森女装的小姑娘背着一个萌书包露出一副无辜样，
+或是小清新的网页上一句已被说烂了的“一场说走就走的旅行”，就会很有感触，也喜欢一个人静静地感受这些，
+再说些什么“在这个喧闹的世界能安静下来听听自己的心声是多么美妙的事！”之类的话。
+这个时候就好像跟周围的世界隔开了，世界它过着自己的生活，我就沉醉在我的想象中。
+其实没有什么经历又怎么能感受到安静丛中的美，随着阅历的增长，有些事情当时以为自己懂的，
+后来才知道原来那个时候根本没懂。不过这样不懂又装懂的感觉就像小女孩穿着高跟鞋，看起来傻傻的，
+也挺可爱。至于到底懂不懂，我想肯定没有懂，但也不是一点都不懂。不过不懂也没什么，总是要有个过程的，
+在不懂的时候摸索，傻乎乎的样子，日后回忆起来也是一段开心的回忆。&lt;/p&gt;
+
+&lt;p&gt;也许该谈谈爱情，一个陌生的东西。上次有人跟我告白还是小六的时候，在那之后我至今都没有桃花了。
+我喜欢过很多人，但总是说变就变，“可能我只是喜欢暗恋的感觉”，这句话也许是说我，也许是我用来掩饰的借口。
+借口多一点吧，因为我还是很希望能经历一下的，这样才知道到底是怎么样的，恋爱是什么滋味，
+跟异性接触是什么感觉，拥抱时心跳会有多快……其实我好羡慕专情的人，那才是爱情吧，我的只能叫喜欢，
+不知道爱的滋味。我想提一件事，就发生在几个星期前。那个时候我大概真的很希望生活有所改变，
+然后又碰到了我所谓的男神，可以说是肤浅地一下就认为他是我男神了（一见钟情在我看来很美妙，
+但理性让我觉得这是肤浅的，一见能见出些什么呢？）。接下来我大概算是迈出了我关于爱情的一步，
+我弄到了所谓男神的QQ，犹豫了几天后决定加他。第一次是没有反应，我想大概是被忽略了。于是我又加了一次，
+并附上了一句话，内容是让他点拒绝，而不要点忽略。所以他就点了拒绝，并回了一句“抱歉，我只加生活中认识的人。
+”我并没有觉得伤心，不过有些遗憾。从恋爱的角度上来讲，本来就是陌生人，他拒绝加我是合情合理；情没有到深处，
+我甚至都没感到伤心（伤心这个词写在这都觉得重了）；但是后来发现这个所谓男神还是一个比较有追求的男生，
+不能够认识他还是很遗憾的。但再后来我又发现了不少，昨天知道的一件事更是让我断断续续想了很久，
+其实之前觉得他有追求，也许他也不过是穿西装的小男孩。哈哈。不过要谢谢他的直接，这样很好。严格地说，
+我这算是要迈出一步都没被允许，现在想想，那几天就像打了鸡血一样，倒也没什么可笑不可笑的，
+我觉得这样很好，经历一下，没什么大不了，想太多会太累，而且这又没什么丢脸的，
+回忆起来觉得自己也有勇敢过不是很棒么！&lt;/p&gt;
+
+&lt;h2&gt;2014.1.31&lt;/h2&gt;
+
+&lt;p&gt;今天看到一句话——&lt;code&gt;年少时，常去荒芜世界的一隅，年老时，包袱里的旧事叮当作响。&lt;/code&gt;
+美好的时光到底是风轻云淡平平凡凡地过，还是轰轰烈烈不断尝试呢？这一直是我心中的一个矛盾点，
+一直矛盾着，矛盾着，忽而觉得平淡的好，忽而觉得应该去闯闯。现在还是不知道怎样才好。想了想，
+也许怎样都好吧。只能说喜欢就好。也许不应该纠结于要怎样渡过最美好的时光，否则这最美好的时光就在纠结中渡过了。
+任何一种方式，到后来都会有所收获吧，除了纠结这一方式。不过，我还是更倾向于闯一闯，虽然我本身并不属于敢闯的人，
+但正因为如此，我需要改变自己，去闯，去体验。&lt;/p&gt;
+
+&lt;h2&gt;2014.2.25&lt;/h2&gt;
+
+&lt;p&gt;我想我真的是超级喜欢“最美的时光”这个词，时光本身就是一个很美的词，加上最美，简直美得不能更美。
+最近看一本电视剧——&lt;a href=&quot;http://baike.baidu.com/subview/4328729/9010141.htm#viewPageContent&quot;&gt;《最美的时光》&lt;/a&gt;。看到苏曼在msn上与宋翊聊天那样，
+让我想到了高中时几乎每个周末我都会在QQ打扰一个学长，真是不亦乐乎。就是这样，所以我现在真的是很喜欢这部剧呢，
+尽管现在是都教授的时代。想来如果以后工作能遇上宋翊、陆励成这样的上司也是极好的，这样上班也是超级幸福的感觉。
+目前看到第十集，这部剧已经让我回忆起了暗恋的感觉，也感受到了女主为幸福勇往直前的勇气，
+但我还不明白为什么这部剧叫“最美的时光”，目前看到的这些还不足以构成一个美好的时光，很期待接下去的戏。&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>我的同桌们</title>
+        <link>http://kreja.github.io//2014/02/06/my-deskmates.html</link>
+        <guid isPermaLink="true">http://kreja.github.io//2014/02/06/my-deskmates.html</guid>
+        <pubDate>Thu, 06 Feb 2014 00:00:00 +0800</pubDate>
+        <description>&lt;blockquote&gt;&lt;p&gt;我可不想在回忆前再多说什么煽情的话了，那我就直接写了，那些年，我又恨又爱的同桌们！&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;按顺序来吧，希望我不会漏掉谁。&lt;/p&gt;
+
+&lt;h2&gt;1 幼儿园的同桌&lt;/h2&gt;
+
+&lt;p&gt;这个我真的想不起来了！我只记得幼儿园午睡坐我旁边的小伙伴，不知道是不是我幼儿园的一个同桌。
+我们午睡的时候是靠在桌子上，然后把各自的小毯子盖在身上，老师会在旁边监督我们，不准我们抬起头来，
+不准有大动作。天！可是我不要午睡！所以，哈哈！我就用被子盖住头，我的小伙伴也是，然后我们就串通了一起玩
+（想不起来能有什么好玩的，可是那个时候很开心呢！）。这样子，本来我不喜欢的午睡倒也成了我期待的一个项目。
+可是！有一天！一个小男孩居然告发了我们！真是令人伤心，更伤心的是我还喜欢那个小男孩呢！他怎么能告发我（们），
+告发我（们）的怎么能是他！这确实令我伤心了一会儿，不过后来我还是继续喜欢着那个小男孩，
+我可以很自豪地说断断续续坚持到了小学毕业么！&lt;/p&gt;
+
+&lt;p&gt;幼儿园的同桌就到这里吧，实在想不起那时的同桌了，何况那时都是绕着桌子坐的，小屁孩屁颠屁颠的管什么同桌不同桌呢。&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>追星的岁月</title>
+        <link>http://kreja.github.io//2013/08/17/star-struk-times.html</link>
+        <guid isPermaLink="true">http://kreja.github.io//2013/08/17/star-struk-times.html</guid>
+        <pubDate>Sat, 17 Aug 2013 00:00:00 +0800</pubDate>
+        <description>&lt;blockquote&gt;&lt;p&gt;追星是个永恒的话题。。&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;h2&gt;小学&lt;/h2&gt;
+
+&lt;p&gt;小学三年级的时候我看了“流星花园”，这是我人生中看的第一部留下深刻印象的偶像剧，从此我开始寻找自己的偶像。&lt;/p&gt;
+
+&lt;p&gt;其实在此之前我一直很迷恋柯南，还梦到过他，记得梦里的颜色是以橙色为主打色再加一些红色，感觉就像在火星，
+又像是秋天，醒来后我开心了好久，觉得自己跟柯南真是有缘分啊！那个时候我哥也才19，有一次我知道新一也是19，
+我以为他跟我哥是同年的，为此我好激动。好吧，动漫里的人物就不算了，开始讲讲真人偶像吧。&lt;/p&gt;
+
+&lt;p&gt;第一个（用“群”也许更适合）偶像，当然是F4啦。其实我在到底应该更喜欢谁这个问题上纠结了很久，不过我更清楚不喜欢谁多一点。
+吴建豪，当时我直接称他为“女人家”，因为他头发长长的（虽然其他几个头发也不短，但我就是觉得他比较像“女人家”），我是直女嘛，
+所以我是不喜欢这个“女人家”的。言承旭，道明寺的发型你也知道啦，由于这个原因，我当时没发现他的帅，责任在我，是我当时修养不够。
+朱孝天，我当时还有点点喜欢他的呢，我也说不上来。周渝民，这四个里我当时可能最喜欢他了，当时多希望自己是杉菜啊（不要拍我）。&lt;/p&gt;
+
+&lt;p&gt;第二个偶像是杰伦！我不记得中间是怎样过渡的了，反正我就开始喜欢周杰伦了。那会儿我们一下课就谈前一天娱乐新闻里的事，
+还讨论各自的偶像。当时有个女生一本正经地说：“周杰伦其实不帅的呀，真的，上次电视里那个谁谁谁就是这样说的。”“嗯嗯。”
+周围的女生开始附和。我听了是有点不爽啊，“哪里啦！还行啦！”，后来年少轻狂的我居然……没有打架啦，想多了你。总之，
+我对周杰伦的喜欢可是持续了好一段时间的，要不是侯佩岑的出现，也许会喜欢他直到昆凌的出现吧。侯佩岑的出现让我伤心了很久呢，
+还想多了以为是杂志联合起来骗我的（不好意思，我把自己看得太重了）。说实话，那时听一首杰伦的歌可是很幸福的事啊！
+虽然那时我可能不太懂歌词内涵，但是我听起来就好像我都懂的一样，真美好啊！&lt;/p&gt;
+
+&lt;p&gt;第三个偶像是五月天，过渡原因说过了就是侯佩岑（诶，桑心往事不提了）。有一天我看到倔强的MV，激动得我啊，然后我就决定喜欢五月天了。
+那时候回家除了看动画片就是看娱乐新闻，一个台接一个台地换过来，看得爽爆了，常常同一个新闻看好几遍也不觉得烦
+（我是有多么的热衷于娱乐事业）。当时湖南卫视有个类似歌曲排行榜一样的节目，有时我就会看到五月天的歌上榜，
+然后第二天上学就会兴奋地跟同学说“我昨天看到XX电视台放了五月天的歌喏！”巴拉巴拉说得开心得好像中奖了一样。&lt;/p&gt;
+
+&lt;p&gt;这里插一句，前几天（2013.9月中旬）周杰伦台北演唱会上请到五月天做嘉宾，这是我最想去的两个演唱会，现在买一张票就相当于看了两场，
+观众真是有赚到啊！&lt;/p&gt;
+
+&lt;p&gt;后来，六年级末我又转移方向瞄准了罗志祥，那时候真是觉得他太好了，以至于想不通世上怎么真的有这么帅的人，还买了他一张海报，
+不敢贴出来（怕我妈多想==），就有时睡前拿出来好好瞧瞧，瞧着瞧着又想不通他怎么这么帅了，现在感觉他趋向非主流了，
+我是对他越来越没感觉了。。。不过现在的他确实比那时候红多了。&lt;/p&gt;
+
+&lt;h2&gt;初中&lt;/h2&gt;
+
+&lt;p&gt;于是乎，我来到了初中。我怎么有点想不起来那时候追哪个星了。那时候大概是选秀节目风起云涌之时。
+是的，我在看东方卫视的我型我秀还有加油好男儿（不知为甚，就不爱看湖南台的选秀节目，虽然常看湖南台的电视剧==）。
+选秀这种就一带而过吧，总感觉跟打鸡血差不多，一阵就过去了。不过那时候是挺开心的，还可以跟小伙伴们聊聊赛况，闲扯闲扯。
+话说回来，其实当然王传君是有激励到我的，因为他被淘汰了，然后我有一种要为他争光的意思，然后期末考果然争了光，
+囧，现在那“光”呢？这里让我想起了美好的初二，经历了初一的厌学导致期末大败笔之后，初二的我上进很多，效率和收获也不错，
+而且坐在一个我很满意的座位，跟周围（猥琐而又可爱）的小伙伴们玩得很开心，也从小伙伴们身上学到了效率的提高方法
+（你们可能不知道哦，初二的时候学习你们当中的某个？一两个？，所以作业在学校就能搞定不少，回家作业扫个尾还能看看杂志什么的，
+然后看的杂志又超激励，每次都打了鸡血似的，超开心），其实当时肯定也有很多烦恼的时候，不过现在让我选择回到过去某个时刻，
+我会貌不犹豫地选择初二那段时光。&lt;/p&gt;
+
+&lt;h2&gt;高中&lt;/h2&gt;
+
+&lt;p&gt;到了高中。&lt;/p&gt;
+
+&lt;p&gt;现在不想写了，未完待续。&lt;/p&gt;
+</description>
+      </item>
+    
+  </channel>
+</rss>
