@@ -1,0 +1,29 @@
+# Site settings
+# 不要在配置文件中使用 tab 制表符
+title: kelly one
+description: > # this means to ignore newlines until "baseurl:"
+  Viva La Vida
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://kreja.github.io/" # the base hostname & protocol for your site
+paginate: 6
+paginate_path: "page:num"
+
+# Build settings
+markdown: kramdown
+
+# contacts
+email: kellywang.ok@gmail.com
+github_username:  kreja
+twitter_username: krejaone
+weibo_username: blusblue
+douban_username: betterdigtwo
+address: Hangzhou, Zhejiang, China
+address_link: http://en.wikipedia.org/wiki/Hangzhou
+
+# disqus 设置
+disqus:
+  shortname: kreja
+
+# gavatar & Favicon
+gavatar: /public/upload/gavatar/gavatar.png
+favicon: /public/upload/gavatar/favicon.ico

@@ -1,0 +1,53 @@
+<footer class="site-footer">
+
+  <div class="wrapper">
+    
+    <!-- description, say anything you want to say -->
+    <div class="des">{{ site.description }}</div>
+    
+    <!-- contacts -->
+    <div class="contacts">
+      
+      Subscribe via <a href="{{ "/feed.xml" | prepend: site.baseurl }}">RSS</a>.
+
+      {% if site.email %}
+      <a href="mailto:{{ site.email }}">Email</a> me.
+      {% endif %}
+
+      I'm also on
+      
+      {% if site.github_username %}
+      <a href="https://github.com/{{ site.github_username }}">
+        <span class="username">Github</span>
+      </a>
+      {% endif %}
+
+      {% if site.twitter_username %}
+      <span>,</span>
+      <a href="https://twitter.com/{{ site.twitter_username }}">
+        <span class="username">Twitter</span>
+      </a>
+      {% endif %}
+
+      {% if site.weibo_username %}
+      <span>,</span>
+      <a href="http://weibo.com/{{ site.weibo_username }}">
+        <span class="username">Weibo</span>
+      </a>
+      {% endif %}
+
+      {% if site.douban_username %}
+      <span>,</span>
+      <a href="http://www.douban.com/people/{{ site.douban_username }}">
+        <span class="username">Douban</span>
+      </a>
+      {% endif %}
+      .
+    </div>
+
+  </div>
+
+</footer>
+
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/base.js"></script>

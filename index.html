@@ -1,0 +1,77 @@
+---
+layout: default
+---
+
+<!-- 所有posts -->
+<div class="main-content active">
+  <ul class="post-list">
+  {% for post in paginator.posts %}
+    <li class="v-center h-center dir-vertical">
+      <p class="post-title">{{ post.title }}</p> 
+      <p><span class="post-meta">{{ post.date | date: "%Y-%m-%d %H:%M" }}</span></p>
+  	<a class="post-link" href="{{ post.url | prepend: site.baseurl }}">
+      	<div class="des v-center h-center">
+      	{% if post.description %}
+      		{{ post.description }}
+      	{% else %}
+  			See More...
+      	{% endif %}
+      	</div>
+      </a>
+    </li>
+  {% endfor %}
+  </ul>
+
+  <!-- 分页链接 -->
+  {% if paginator.total_pages > 1 %}
+  <div class="pagination h-center">
+    {% if paginator.previous_page %}
+      <a class="page-item" href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&laquo; Prev</a>
+    {% else %}
+      <span class="page-item">&laquo; Prev</span>
+    {% endif %}
+
+    {% for page in (1..paginator.total_pages) %}
+      {% if page == paginator.page %}
+        <em class="page-item">{{ page }}</em>
+      {% elsif page == 1 %}
+        <a class="page-item" href="{{ '/index.html' | prepend: site.baseurl | replace: '//', '/' }}">{{ page }}</a>
+      {% else %}
+        <a class="page-item" href="/{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}">{{ page }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if paginator.next_page %}
+      <a class="page-item" href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Next &raquo;</a>
+    {% else %}
+      <span class="page-item">Next &raquo;</span>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+
+
+<!-- 分类 -->
+{% for category in site.categories %} 
+<div class="main-content" id="{{ category[0] }}">
+  <ul class="post-list post-category">
+    {% for post in category[1] %}
+      <li class="v-center h-center dir-vertical">
+        <p class="post-title">{{ post.title }}</p> 
+        <p><span class="post-meta">{{ post.date | date: "%Y-%m-%d %H:%M" }}</span></p>
+      <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">
+          <div class="des v-center h-center">
+          {% if post.description %}
+            {{ post.description }}
+          {% else %}
+          See More...
+          {% endif %}
+          </div>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endfor %}
+
+
