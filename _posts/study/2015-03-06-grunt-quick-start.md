@@ -17,6 +17,7 @@ description: 看了本文，就可以用 Grunt 进行最基本的使用啦啦啦
 ```bash
 sudo npm install -g yo
 ```
+
 ```bash
 sudo npm install -g grunt-cli
 ```
@@ -51,30 +52,32 @@ npm install --save-dev grunt-contrib-concat grunt-contrib-jshint grunt-contrib-s
 
 ### 配置 Gruntfile.js 的语法
 * 所有代码要包裹在
+
 ```
 module.exports = function(grunt) {
     ...
 };
 ```
+
 里面
 * 这里与 Grunt 有关的主要有三块代码：任务配置代码、插件加载代码、任务注册代码。
 * 任务配置代码
 	* 调用插件配置一下要执行的任务和实现的功能
 
-	```
-	grunt.initConfig({
-	    pkg: grunt.file.readJSON('package.json'),//读取 package.json 文件
-	    uglify: {//配置 uglify 插件的任务
-	      	options: {//配置全局 options
-	        	banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-	      	},
-	      	build: {//建立 build 任务
-	        	src: 'src/<%= pkg.name %>.js',
-	        	dest: 'build/<%= pkg.name %>.min.js'
-	      	}
-	    }
-	});
-	```
+```
+grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),//读取 package.json 文件
+    uglify: {//配置 uglify 插件的任务
+      	options: {//配置全局 options
+        	banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+      	},
+      	build: {//建立 build 任务
+        	src: 'src/<%= pkg.name %>.js',
+        	dest: 'build/<%= pkg.name %>.min.js'
+      	}
+    }
+});
+```
 
 	* 是对象的格式
 	* 怎么写 options 里的参数和 build 里的参数内容，要查看每个插件的用法，根据用法编写任务，看[官方文档](https://www.npmjs.com/)。

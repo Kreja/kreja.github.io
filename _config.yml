@@ -10,6 +10,10 @@ paginate_path: "page:num"
 
 # Build settings
 markdown: kramdown
+highlighter: pygments
+
+kramdown:
+  input: GFM
 
 # contacts
 email: kellywang.ok@gmail.com
