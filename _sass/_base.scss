@@ -1,5 +1,6 @@
 html,body{
-    height: 100%;
+    width: 100%;
+    overflow-x: hidden; 
 }
 
 /**
@@ -269,6 +270,7 @@ hr:before {
 /*scrollBar*/
 ::-webkit-scrollbar {
     width: 5px;
+    height: 5px;
 }
  
 ::-webkit-scrollbar-track {
@@ -289,6 +291,15 @@ button{
 
     &:focus{
         background: $grey-color-light;
+    }
+}
+
+
+h1 {
+    font-size: 36px;
+
+    @include media-query($on-laptop) {
+        font-size: 32px;
     }
 }
 
@@ -313,5 +324,13 @@ h4 {
 
     @include media-query($on-laptop) {
         font-size: 18px;
+    }
+}
+
+h5 {
+    font-size: 16px;
+
+    @include media-query($on-laptop) {
+        font-size: 14px;
     }
 }

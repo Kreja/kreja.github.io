@@ -1,0 +1,17 @@
+<!-- 打开 -->
+<input class="radio-flag" id="open-btn" type="radio" name='switch-btn'>
+<!-- 关闭 sidebar -->
+<input class="radio-flag" id="close-btn" type="radio" name='switch-btn'>
+
+<div class="sidebar">
+	<ul class="category-list">
+	{% for category in site.categories %}
+	  <li>
+	  	<a class="page-link category-link" href="{{site.baseurl}}/#{{ category | first | replace: '//', '/' }}">{{ category | first }}({{ category | last | size }})</a>
+	  </li>
+	{% endfor %}
+	</ul>
+	
+	<label class="switch-btn" for='open-btn'></label>
+	<label class="switch-btn" for='close-btn'></label>
+</div>

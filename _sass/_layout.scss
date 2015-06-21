@@ -217,7 +217,6 @@
     margin-bottom: $spacing-unit;
     font-size: $small-font-size;
 }
-
 .post-title {
     font-size: 42px;
     letter-spacing: -1px;
@@ -227,7 +226,6 @@
         font-size: 36px;
     }
 }
-
 .post-content {
     margin-bottom: $spacing-unit;
 
@@ -267,9 +265,11 @@
 }
 
 /**
- * sidebar.html
+ * sidebar-left.html
+ * and also for sidebar-right
  */
 .sidebar{
+    background: #fff;
     width: $sidebar-width;
     min-width: $sidebar-width;
     padding: $spacing-unit;
@@ -337,12 +337,157 @@
         min-width: 0;
         padding: $spacing-unit 0;
 
+
         .category-list{
             width: 0;
+            transition: all $transition-duration;
         }
 
         .switch-btn[for="open-btn"]{
             z-index: 2;
         }
+    }
+}
+
+/**
+ * sidebar-right.html
+ */
+.sidebar.right{
+    width: $sidebar-width-right;
+    min-width: $sidebar-width-right;
+    padding-right: 0;
+    border: none;
+    border-left: 1px solid $grey-color-light;
+
+    .post-sidebar{
+        position: fixed;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        text-align: left; 
+        width: $sidebar-width-right;
+        overflow-x: hidden; 
+        transition: all $transition-duration;
+
+        & > a{
+            font-size: 18px;
+        }
+
+        .catalog-list{
+            transition: all $transition-duration;
+            width: $sidebar-width-right;
+            list-style: none;
+            margin: 0;
+            max-height: 300px; 
+            overflow-y: auto;
+
+            li{
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .h1{
+                font-size: 16px;
+            }
+            .h2{
+                font-size: 15px;
+                padding-left: 5px;
+            }
+            .h3{
+                font-size: 14px;
+                padding-left: 10px;
+            }
+            .h4{
+                font-size: 13px;
+                padding-left: 15px;
+            }
+            .h5{
+                font-size: 12px;
+                padding-left: 20px;
+            }
+        }
+    }
+
+    .switch-btn{
+        left: 0;
+        right: auto;
+        border: none;
+        border-right: 1px solid #ccc;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+
+        &:before{
+            background: url(../img/sidebar-open-btn.png) fixed no-repeat;
+            background-position: calc(#{$sidebar-width} + (#{$spacing-unit} * 2) - 8px) center;
+        }
+
+        &[for="open-btn-right"]:before{
+            background: url(../img/sidebar-close-btn.png) fixed no-repeat;
+            background-position: 2px center;
+        }
+    }
+}
+
+.radio-flag.right{
+    &#close-btn-right:checked + .sidebar{
+        width: 10px;
+        min-width: 0;
+        padding: $spacing-unit 0;
+
+        .post-sidebar{
+            width: 0;
+            .catalog-list{
+                width: 0;
+                transition: all $transition-duration;
+            }
+        }
+
+        .switch-btn[for="open-btn-right"]{
+            z-index: 2;
+        }
+    }
+}
+
+
+
+/**
+ * scroll.html
+ */
+$scrollBtnWidth: 40px;
+.scroll {
+    width: $scrollBtnWidth;
+    height: calc(#{$scrollBtnWidth} + 5px);
+    position: fixed;
+    right: 60px;
+    bottom: 150px;
+
+    .top, .bot {
+        position: absolute;
+        border-style: solid;
+        cursor: pointer;
+            transition: border-color .3s ease;
+    }
+  .top {
+    top: 0;
+    border-color: transparent transparent $grey-color-dark transparent;
+    border-width: 0 $scrollBtnWidth/2 $scrollBtnWidth;
+    z-index: 100;
+    &:hover {
+        border-color: transparent transparent $grey-color transparent;
+    }
+  }
+  .bot {
+    top: $scrollBtnWidth+5;
+    border-width: $scrollBtnWidth $scrollBtnWidth/2 0;
+    border-color: $grey-color-dark transparent transparent;
+    &:hover {
+        border-color: $grey-color transparent transparent;
+    }
+  }
+}
+
+@include media-query($on-palm) {
+    $scrollBtnWidth: 40px;
+
+    .scroll{
+        right: 10px;
+        bottom: 50px;
     }
 }

@@ -7,14 +7,9 @@
 
     {% include header.html %}
 
-
-    <div class="dir-horizontal">
-      {% include sidebar.html %}
-
-      <div class="flex wrapper page-content">
-        {{ content }}
-      </div>
-    </div>
+    {{ content }}
+  
+    {% include scroll.html %}
 
     {% include footer.html %}
 
