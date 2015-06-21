@@ -1,0 +1,59 @@
+---
+layout: page
+title: About
+permalink: /about/
+---
+
+{% if site.gavatar %}
+<img class="avatar lg" src="{{site.gavatar}}" alt="avatar">
+{% endif %}
+
+<p>
+	I'm Kelly.
+	{% if site.address %}
+	I'm from <a href="{{site.address_link}}">{{site.address}}</a>.
+	{% endif %}
+</p>
+
+<hr>
+
+
+<h2>contacts</h2>
+
+{% if site.email %}
+<p>
+	You can <a href="mailto:{{ site.email }}">Email</a> me.
+</p>
+{% endif %}
+
+<p>
+	I'm also on 
+	{% if site.github_username %}
+	<a href="https://github.com/{{ site.github_username }}">
+		<span class="username">Github</span>
+	</a>
+	{% endif %}
+
+	{% if site.twitter_username %}
+	<span>, </span>
+	<a href="https://twitter.com/{{ site.twitter_username }}">
+		<span class="username">Twitter</span>
+	</a>
+	{% endif %}
+
+	{% if site.weibo_username %}
+	<span>, </span>
+	<a href="http://weibo.com/{{ site.weibo_username }}">
+		<span class="username">Weibo</span>
+	</a>
+	{% endif %}
+
+	{% if site.douban_username %}
+	<span>, </span>
+	<a href="http://www.douban.com/people/{{ site.douban_username }}">
+		<span class="username">Douban</span>
+	</a>
+	{% endif %}.
+</p>
+
+
