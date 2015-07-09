@@ -5,10 +5,10 @@ category: study
 tags: retina 
 description: retina，像素，rem，高清屏中边框的1px问题
 ---
-# retina 高清方案
 
 ​## 基本知识
 ---
+
 * 设备像素（物理像素）
 	* 显示器最小的物理显示单元。每个像素有自己的颜色、亮度。
 
@@ -18,13 +18,13 @@ description: retina，像素，rem，高清屏中边框的1px问题
 * css 像素（设备独立像素，dips）
 	* CSS 像素主要使用在浏览器上，就是写 css 时使用的像素px。CSS 像素在所有屏幕上是一样的，与设备无关。
 
-* 设备像素比 window.devicePixelRatio(dpr) 
-	* window.devicePixelRatio = 物理像素/设备独立像素（dips）
+* 设备像素比 `window.devicePixelRatio`(dpr) 
+	* `window.devicePixelRatio` = 物理像素/设备独立像素（dips）
 	* 非视网膜的 dpr = 1，css 1px 对应一个物理像素，如：非视网膜屏幕的手机，dpr=320/320=1
 	* 视网膜的 dpr = 2，css 1px 对应两个物理像素，如：视网膜屏幕的手机，dpr=640/320=2。1个css像素对应2*2=4个物理像素
 	* 获取设备像素比 dpr：
-		* js: window.devicePixelRatio
-		* css: -webkit-device-pixel-ratio，-webkit-min-device-pixel-ratio，-webkit-max-device-pixel-ratio,对不同 dpr 的设备做样式适配
+		* js: `window.devicePixelRatio`
+		* css: `-webkit-device-pixel-ratio`，`-webkit-min-device-pixel-ratio`，`-webkit-max-device-pixel-ratio`,对不同 dpr 的设备做样式适配
 
 ## 图片显示问题
 ---
@@ -39,6 +39,7 @@ description: retina，像素，rem，高清屏中边框的1px问题
 
 问题：有张 400*600 的图，注意：假设视网膜屏幕需要图片宽度 400，则正常屏幕只需要 200。视网膜屏幕上看上去 200 宽的图，其实有 400 个像素宽。下面三个方法对于正常屏幕，图片有一半像素是浪费了。
 解决：
+
 * html
 浪费像素了。
 	* `<img src="example@2x.png" width="200" height="300" />`
@@ -75,6 +76,7 @@ description: retina，像素，rem，高清屏中边框的1px问题
 * image-set 是 CSS4 中对background-image属性定义的一种新方法
 * 原理：Webkit内核"safari6"和“chrome21”支持CSS4的background-image新规范草案image-set。通过Webkit内核的浏览器私有属性“-webkit”，image-set为Web前端人员提供了一种解决高分辨率图像的显示，用来解决苹果公司提出的Retian屏幕显示图片的技术问题。简而言之：这个属性用来支持Web前端人员解决不同分辨率下图片的显示，特别的（Retina屏幕）。
 * 缺点： 仅支持background-image属性，而不能使用在 `<img>` 标签中。
+
 ```
 #test {
     background-image: url(assets/no-image-set.png); 
@@ -93,6 +95,7 @@ description: retina，像素，rem，高清屏中边框的1px问题
 retina 下，物理像素要 1px，那 css 像素就得是 0.5px，不然看上去会粗。
 问题：有些浏览器不认识 0.5 px。
 解决：
+
 ### 方法1 —— scale
 不能实现圆角。
 实现四条边：容器自己 after,before，父元素 after,before。
@@ -133,7 +136,7 @@ var scale = 1/window.devicePixelRatio;
 > 要求： 任何手机屏幕上字体大小都要统一。
 
 解决：
-因为视觉稿画布本来就是 2 倍高宽，再 scale 0.5 就是正确的 1 了，所以视觉稿直接量即可，不用再除以 2.
+因为视觉稿画布本来就是 2 倍高宽，再 scale 0.5 就是正确的 1 了，所以视觉稿直接量即可，不用再除以 2
 对于字体，scale 了 dpr 倍要乘回来，视觉稿是两倍要除掉，所以是量得的font-size*dpr/2：
 
 ```
@@ -171,12 +174,15 @@ font-size: 16px;
 ```
 
 使用：
+
 ```
 .px2px(font-size, 32);
 ```
 
 ### 方法3—— box-shadow
+
 圆角、多条线都可以实现。但颜色不好调。
+
 ```
 -webkit-box-shadow:0 1px 1px -1px rgba(0, 0, 0, 0.5);
 ```
@@ -193,6 +199,7 @@ rem 方案：根据手机的屏幕尺寸、dpr动态地改变 html 的 font-size
 
 ### css 改变 html 的 font-size（基准值）
 不精确，但够用
+
 ```
 html{font-size: 32px;}
 //iphone 6 
@@ -241,6 +248,7 @@ window.px2rem: function(v) {
 window.dpr = dpr;
 window.rem = rem;
 ```
+
 ### px 转成 rem 单位
 有一张 iphone6 视觉稿 750 * 1334px：
 rem = px / 基准值 = 10 * px/document.documentElement.clientWidth * dpr。
@@ -270,16 +278,16 @@ rem = px / 基准值 = 10 * px/document.documentElement.clientWidth * dpr。
 
 ## 工具
 ---
-* retina.js
+* retina.js(还没研究-- todo)
 
 ## 如何让网站适应 retina 屏幕
 ---
-Retina web
+Retina web（？？忘了这哪来的 todo）
 
 ## 参考
 ---
 1. [image-set实现Retina屏幕下图片显示](http://www.w3cplus.com/css/safari-6-and-chrome-21-add-image-set-to-support-retina-images.html)
 2. [走向视网膜（Retina）的Web时代](http://www.w3cplus.com/css/towards-retina-web.html)
 3. [Retina Display Media Query](https://css-tricks.com/snippets/css/retina-display-media-query/)
-4. [移动端高清、多屏适配方案](http://www.atatech.org/articles/36642)
+4. [移动端高清、多屏适配方案](http://www.html-js.com/article/Mobile-terminal-H5-mobile-terminal-HD-multi-screen-adaptation-scheme%203041)
 5. [mobile web retina下1px解决方案升级版](http://www.atatech.org/articles/26335?rnd=1893640720#1)
