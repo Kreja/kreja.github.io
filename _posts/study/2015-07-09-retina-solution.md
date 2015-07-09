@@ -1,3 +1,12 @@
+---
+layout: post
+title: retina 高清方案
+category: study
+tags: retina 
+description: retina，像素，rem，高清屏中边框的1px问题
+---
+# retina 高清方案
+
 ​## 基本知识
 ---
 * 设备像素（物理像素）
