@@ -40,6 +40,7 @@ tmp
 # Editor & OS files
 ############################
 .idea
+.DS_STORE
 .Trashes
 .project
 .rebooted
