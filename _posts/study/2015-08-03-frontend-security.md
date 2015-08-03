@@ -144,31 +144,32 @@ description: xss、csrf的攻击和防御
 		1.  `<script>alert(1)\x3C/script>`
 		2. `'<'+'/script>'`
 		3. `<\/script>`
-* 但是 js 字符串中的 `<` 转义成 `\x3C` 并不能防止从 `innerHTML` 进行攻击。
 
-```html
-< script>
-    var userName = "Jeremy\x3Cscript\x3Ealert('boom')\x3C/script\x3E";
-    document.write( "<span>"+userName+"</span>");
-</script>
-```
+* js 字符串中的 `<` 转义成 `\x3C` 并不能防止从 `innerHTML` 进行攻击。
 
-虽然通过 innerHTML 插入的脚本不会执行（只插入，不执行）：
+	```html
+	< script>
+	    var userName = "Jeremy\x3Cscript\x3Ealert('boom')\x3C/script\x3E";
+	    document.write( "<span>"+userName+"</span>");
+	</script>
+	```
 
-```html
-< script>
-    var userName = "Jeremy\x3Cscript\x3Ealert('boom')\x3C/script\x3E";
-    document.getElementById('test').innerHTML = userName;
-</script>
-```
+	虽然通过 innerHTML 插入的脚本不会执行（只插入，不执行）：
 
-但是通过 innerHTML 加入的事件是可以触发的，这样也可以进行攻击：
+	```html
+	< script>
+	    var userName = "Jeremy\x3Cscript\x3Ealert('boom')\x3C/script\x3E";
+	    document.getElementById('test').innerHTML = userName;
+	</script>
+	```
 
-```js
-var name = "\x3Cimg src=x onerror=alert(1)\x3E";
-document.getElementById('test').innerHTML = name;
-```
-但是先对 name 进行过滤，把 `<` 转义成 `&lt;` 就不会作为元素插入了，而只是字符串。
+	但是通过 innerHTML 加入的事件是可以触发的，这样也可以进行攻击：
+
+	```js
+	var name = "\x3Cimg src=x onerror=alert(1)\x3E";
+	document.getElementById('test').innerHTML = name;
+	```
+	但是先对 name 进行过滤，把 `<` 转义成 `&lt;` 就不会作为元素插入了，而只是字符串。
 
 * 理一下`<`，`&lt;`，`\x3C`
 
