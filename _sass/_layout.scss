@@ -385,23 +385,39 @@
                 text-overflow: ellipsis;
             }
             .h1{
-                font-size: 16px;
+                font-size: 18px;
             }
             .h2{
-                font-size: 15px;
+                font-size: 14px;
                 padding-left: 5px;
+
+                &:before{
+                    content:'🍼';
+                }
             }
             .h3{
-                font-size: 14px;
+                font-size: 12px;
                 padding-left: 10px;
+
+                &:before{
+                    content:'🍙';
+                }
             }
             .h4{
-                font-size: 13px;
+                font-size: 12px;
                 padding-left: 15px;
+
+                &:before{
+                    content:'🍨';
+                }
             }
             .h5{
                 font-size: 12px;
                 padding-left: 20px;
+
+                &:before{
+                    content:'🍧';
+                }
             }
         }
     }

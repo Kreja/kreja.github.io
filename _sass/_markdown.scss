@@ -261,6 +261,12 @@ code, tt {
   background-color: #f8f8f8;
   border-radius: 3px; }
 
+code {
+  background-color: #FBEEE0;
+  color: #FC6621;
+  border: 1px solid transparent
+}
+
 pre code {
   margin: 0;
   padding: 0;
@@ -269,7 +275,8 @@ pre code {
   background: transparent; }
 
 .highlight pre {
-  background-color: #f8f8f8;
+  background-color: #333;
+  color: #fff;
   border: 1px solid #cccccc;
   font-size: 13px;
   line-height: 19px;

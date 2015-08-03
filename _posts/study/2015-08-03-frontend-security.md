@@ -17,24 +17,29 @@ description: xss、csrf的攻击和防御
 * 页面有输入，别人就可以注入任意 html，script 到你的页面
 	
 	* 跳转攻击：`<span><%- username %></span>`，有人注册名为 `</span><script>window.location = ‘http://www.example.com'</script>` 后，就进不了这个页面啦，永远都是直接跳到 example.com 了
-	* 查询参数攻击：`<a href="/show?user=<%= userId %>">...</a>`，输入是：`{ userId: "42&user=666” }`，所以服务器收到 https://example.com/show?user=42&user=666，那么 user 666 的用户信息可能被泄露了。解决：转义，不安全的字符转成 %xx 类型的 utf-8 字节，如 &转成%26。
+	* 查询参数攻击：`<a href="/show?user=<%= userId %>">...</a>`，输入是：`{ userId: "42&user=666” }`，所以服务器收到 https://example.com/show?user=42&user=666 ，那么 user 666 的用户信息可能被泄露了。解决：转义，不安全的字符转成 %xx 类型的 utf-8 字节，如 &转成%26。
 	* js 变量攻击：
 
-```js
-< script>
-	var foo = <%- someJSON %>;
-</script>
+		```html
+		<script>
+			var foo = <%- someJSON %>;
+		</script>
+		```
+		攻击者把 someJSON 写成:
 
-// 攻击者把 someJSON 写成
-{ someJSON: JSON.stringify("</script>< script>alert('boom');//") }
+		```json
+		{ someJSON: JSON.stringify("</script>< script>alert('boom');//") }
+		```
 
-// 就成了
-< script>
-	var foo = "</script>< script>alert('boom');//";
-</script>
-```
+		就成了
 
-解决：把 < 转义成 \x3C
+		```html
+		<script>
+			var foo = "</script>< script>alert('boom');//";
+		</script>
+		```
+
+		解决：把 `<` 转义成 `\x3C`
 
 ## 三步防御 XSS
 > 关键：把不安全的转成安全的
@@ -47,13 +52,13 @@ description: xss、csrf的攻击和防御
 	* 缺点：消毒无法消清所有的情况
 	* 注意：只转义 html 实体字符是不够的！html里出现的所有变量都需要转义，包括 css, js, url...
 	
-		```
+		```html
 		<style>
 			.info{
 				background: <%= bgColor %>; /* 头部样式模板渲染 */
 			}
 		</style>		
-		
+
 		<div style="border: 1px solid <%= borderWidth %>"> <!-- 内联样式，模板渲染 -->
 			<a href="/welcome/<%= uri %>">welcome <%= userName %></a> <!-- 链接，模板渲染 --><!-- html 变量，模板渲染 -->
 		</div>
@@ -62,7 +67,6 @@ description: xss、csrf的攻击和防御
 			var config = <%= jsObj %>; // js 变量，模板渲染
 		</script>
 		```
-		
 	* 做法：
 		1. 转成实体编码（html实体字符），最主要：`>,<,',",&`
 			* 如：`<` 转成 `&tl;` 他们的表现形式是一样的，`&tl;` 是实体字符。
@@ -72,18 +76,17 @@ description: xss、csrf的攻击和防御
 		4. js 变量攻击：js 字符串中的 `<` 要转成 `\x3C`，不然即使写在字符串中也会直接被认为是一个脚本。Q&A 有解释。
 	* 工具：
 		* [secure-filters](https://github.com/SalesforceEng/secure-filters/blob/d21f04190a63f1cc55078e4eb96adafe864c79cf/lib/secure-filters.js#L67)
-		* 现在的模板引擎一般都有过滤功能，使用的时候要注意开启过滤功能。之前使用 ejs 模板渲染，<%- %>起到了转义（escaping）的作用
+		* 现在的模板引擎一般都有过滤功能，使用的时候要注意开启过滤功能。之前使用 ejs 模板渲染，`<%- %>`起到了转义（escaping）的作用
+
 3. 内容安全策略
 	* CSP, content-security-policy	
 	* 在服务端设置哦，作为 http 头，或在 `<meta>` 里设置
 	* 作用：规定允许的特征、来源（白名单），如可执行脚本的名单
 		* 之前页面被注入脚本，就可以通过 CSP 控制内联脚本不允许执行来防御攻击
-		
-			```
+
+			```html
 			</span><script>window.location = ‘http://www.example.com'</script> // 要允许内联的脚本，得在 csp 中设置 'unsafe-inline'
 			```
-			
-		
 	* 注意：低级浏览器不支持，所以一般 CSP 是用来做警报的，用来收集黑名单
 	* 工具：搜 helmet
 	
@@ -94,7 +97,7 @@ description: xss、csrf的攻击和防御
 ## CSRF 攻击
 你登上了 example.com，同时又上了 evil.com， evil.com 上有
 
-```
+```html
 < script src="https://example.com/api/inviteAdmin?email=hacker@evil.com"></script>
 ```
 
@@ -126,13 +129,13 @@ description: xss、csrf的攻击和防御
 # Q&A
 * 为什么下面的 `<` 写成 `\x3C`
 
-	```
+	```html
 	< script>document.write('< script src="a.js">\x3C/script>')</script>
 	```
 
 	* 因为 `</script>` 出现在 html 中时，不管它只是字符串还是真的脚本结尾符，html 都认为它是脚本结尾符，所以直接写 `</script>` 会是个隐患：上面的会被 html 理解成：
 	
-	```
+	```html
 	< script>document.write('< script src="a.js"></script>
 	')</script>
 	```
@@ -143,7 +146,7 @@ description: xss、csrf的攻击和防御
 		3. `<\/script>`
 * 但是 js 字符串中的 `<` 转义成 `\x3C` 并不能防止从 `innerHTML` 进行攻击。
 
-```
+```html
 < script>
     var userName = "Jeremy\x3Cscript\x3Ealert('boom')\x3C/script\x3E";
     document.write( "<span>"+userName+"</span>");
@@ -152,7 +155,7 @@ description: xss、csrf的攻击和防御
 
 虽然通过 innerHTML 插入的脚本不会执行（只插入，不执行）：
 
-```
+```html
 < script>
     var userName = "Jeremy\x3Cscript\x3Ealert('boom')\x3C/script\x3E";
     document.getElementById('test').innerHTML = userName;
@@ -161,7 +164,7 @@ description: xss、csrf的攻击和防御
 
 但是通过 innerHTML 加入的事件是可以触发的，这样也可以进行攻击：
 
-```
+```js
 var name = "\x3Cimg src=x onerror=alert(1)\x3E";
 document.getElementById('test').innerHTML = name;
 ```
@@ -173,19 +176,19 @@ document.getElementById('test').innerHTML = name;
 	* js 字符串中直接写`'</script>'`会被 html 当成脚本，所以要写成`\x3C`。js 执行后会把`\x3C`变成`<`。
 	* `\x3C`只会在 js 字符串中会被翻译成 `<`， html 认不出`\x3C`，所以从 html 输入的变量，`\x3C`只是字符串`\x3C`，但是从js输出的变量，`\x3C`就会被翻译成`<`。例：
 
-```
-<input type="text" id="in">
-< script>
-		console.log('\x3Cimg src=x onerror=alert(1)\x3E',document.getElementById('in').value); 
-</script>
-```
+		```html
+		<input type="text" id="in">
+		< script>
+				console.log('\x3Cimg src=x onerror=alert(1)\x3E',document.getElementById('in').value); 
+		</script>
+		```
 
-在 input 框中输入 \x3Cimg src=x onerror=alert(1)\x3E 后，console 的结果
+		在 input 框中输入 \x3Cimg src=x onerror=alert(1)\x3E 后，console 的结果
 
 
-```
-<img src=x onerror=alert(1)> //从js输出的变量，`\x3C`就会被翻译成`<`
-\x3Cimg src=x onerror=alert(1)\x3E //从 html 输入的变量，`\x3C`只是字符串`\x3C`
+		```
+		<img src=x onerror=alert(1)> //从js输出的变量，`\x3C`就会被翻译成`<`
+		\x3Cimg src=x onerror=alert(1)\x3E //从 html 输入的变量，`\x3C`只是字符串`\x3C`
 ```
 
 
