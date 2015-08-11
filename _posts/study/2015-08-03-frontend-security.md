@@ -21,7 +21,7 @@ description: xss、csrf的攻击和防御
 	* js 变量攻击：
 
 		```html
-		<script>
+		<script>	
 			var foo = <%- someJSON %>;
 		</script>
 		```
@@ -80,15 +80,22 @@ description: xss、csrf的攻击和防御
 
 3. 内容安全策略
 	* CSP, content-security-policy	
-	* 在服务端设置哦，作为 http 头，或在 `<meta>` 里设置
+	* 怎么设置
+		* 在服务端设置，作为 http 头
+		* 在网页的 `<meta>` 里设置
+		
+			```html
+			<meta http-equiv="Content-Security-Policy" content="default-src 'self' foo.com">
+			```
+	* [CSP header field](http://www.w3.org/TR/CSP2/#content-security-policy-header-field)
 	* 作用：规定允许的特征、来源（白名单），如可执行脚本的名单
 		* 之前页面被注入脚本，就可以通过 CSP 控制内联脚本不允许执行来防御攻击
 
 			```html
 			</span><script>window.location = ‘http://www.example.com'</script> // 要允许内联的脚本，得在 csp 中设置 'unsafe-inline'
 			```
-	* 注意：低级浏览器不支持，所以一般 CSP 是用来做警报的，用来收集黑名单
-	* 工具：搜 helmet
+	* 注意：低级浏览器不支持，所以一般 CSP 是用来做警报的，用来收集黑名单。报警设置：[Content-Security-Policy-Report-Only](http://www.w3.org/TR/CSP2/#content-security-policy-report-only-header-field)，注意：`<meta>`不支持此字段设置。
+	* 工具：搜 helmet；[cspbuilder](https://cspbuilder.info/static/#/main/)
 	
 ![xss 防御三步曲](/public/upload/study/xss 防御三部曲.jpg)
 
@@ -122,6 +129,14 @@ description: xss、csrf的攻击和防御
 # 发现
 * token 的检验可以写成前置路由，拦截非法入侵
 * onetimetoken，即使这次被拦截了，可是这次的请求已经发送了，下次的token又不一样了，所以这次的 token 被拦截知道了也没用
+
+
+# 优化
+* 在哪里进行防御处理？可以用最少的处理覆盖最多的面？
+	* 听说是在服务器端处理
+	* 我觉得是最早可以处理的时候就进行处理
+	* 前后端得约定好，免得重复处理了
+
 
 # 参考
 * [Preventing XSS and CSRF](http://stash.github.io/empirejs-2014)
