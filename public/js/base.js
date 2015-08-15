@@ -32,10 +32,10 @@ function showCategory(id){
  */
 function WidthChange(mq){
     if(mq.matches){ //手机，sidebar 默认关闭
-        $("#close-btn").attr("checked",true);
-        $("#close-btn-right").attr("checked",true);
+        $("#close-btn").prop("checked",true);
+        $("#close-btn-right").prop("checked",true);
     }else{
-        $("#close-btn").attr("checked",false);
+        $("#close-btn").prop("checked",false);
     }  
 }
 
@@ -108,6 +108,26 @@ function scrollTopAndBot() {
 
     $('.scroll .bot').click(function() {
         $('html, body').animate({scrollTop:$(document).height()}, 'slow');
+        return false;
+    });
+
+    // 控制 sidebar 的显示
+    $('.scroll .center').click(function() {
+        var status = this.innerHTML;
+
+        if(status == 'hide'){ // 要隐藏两侧 sidebar
+            this.innerHTML = 'show';
+            $("#close-btn").prop("checked",true);
+            $("#close-btn-right").prop("checked",true);
+            $("#open-btn").prop("checked",false);
+            $("#open-btn-right").prop("checked",false);
+        }else{
+            this.innerHTML = 'hide';
+            $("#close-btn").prop("checked",false);
+            $("#close-btn-right").prop("checked",false);
+            $("#open-btn").prop("checked",true);
+            $("#open-btn-right").prop("checked",true);
+        }
         return false;
     });
 }

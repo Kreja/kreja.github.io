@@ -473,28 +473,45 @@ $scrollBtnWidth: 40px;
     position: fixed;
     right: 60px;
     bottom: 150px;
+    z-index: 999;
 
-    .top, .bot {
+    .top, .bot, .center {
         position: absolute;
-        border-style: solid;
         cursor: pointer;
+            transition: background-color .3s ease;
+    }
+    .top, .bot {
+        border-style: solid;
             transition: border-color .3s ease;
     }
   .top {
     top: 0;
     border-color: transparent transparent $grey-color-dark transparent;
-    border-width: 0 $scrollBtnWidth/2 $scrollBtnWidth;
+    border-width: 0 $scrollBtnWidth/2 $scrollBtnWidth/2;
     z-index: 100;
     &:hover {
         border-color: transparent transparent $grey-color transparent;
     }
   }
   .bot {
-    top: $scrollBtnWidth+5;
-    border-width: $scrollBtnWidth $scrollBtnWidth/2 0;
+    top: calc(#{$scrollBtnWidth} + 10px);
+    border-width: $scrollBtnWidth/2 $scrollBtnWidth/2 0;
     border-color: $grey-color-dark transparent transparent;
     &:hover {
         border-color: $grey-color transparent transparent;
+    }
+  }
+  .center{
+    height: calc(#{$scrollBtnWidth} / 2);
+    line-height: calc(#{$scrollBtnWidth} / 2);
+    width: calc( #{$scrollBtnWidth});
+    top: calc(#{$scrollBtnWidth} / 2 + 5px);
+    font-size: 10px;
+    background-color: $grey-color-dark;
+    color: #fff;
+    text-align: center;
+    &:hover {
+        background-color: $grey-color;
     }
   }
 }

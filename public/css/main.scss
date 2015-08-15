@@ -5,7 +5,7 @@
 
 
 // Our variables
-$base-font-family: Microsoft YaHei,Helvetica, Arial, sans-serif;
+$base-font-family: proxima-nova,"Helvetica Neue",Helvetica,Roboto,Arial,sans-serif;
 $base-font-size:   16px;
 $large-font-size:  $base-font-size * 1.875;
 $small-font-size:  $base-font-size * 0.875;
@@ -13,7 +13,7 @@ $base-line-height: 1.5;
 
 $spacing-unit:     30px;
 
-$text-color:       #111;
+$text-color:       #484848;
 $background-color: #fdfdfd;
 $brand-color:      #2a7ae2;
 $mask-color: rgba(0,0,0,0.5);
@@ -56,5 +56,5 @@ $transition-duration: 0.5s;
         "base",
         "layout",
         "markdown",
-        "monokai"
+        "react"
 ;
