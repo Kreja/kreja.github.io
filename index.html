@@ -8,7 +8,7 @@ layout: two-bar
   {% for post in paginator.posts %}
     <li class="v-center h-center dir-vertical">
       <p class="post-title">{{ post.title }}</p> 
-      <p><span class="post-meta">{{ post.date | date: "%Y-%m-%d %H:%M" }}</span></p>
+      <p><span class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</span></p>
   	<a class="post-link" href="{{ post.url | prepend: site.baseurl }}">
       	<div class="des v-center h-center">
       	{% if post.description %}
