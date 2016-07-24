@@ -34,3 +34,5 @@ disqus:
 # gavatar & Favicon
 gavatar: /public/upload/gavatar/gavatar.png
 favicon: /public/upload/gavatar/favicon.ico
+
+gems: [jekyll-paginate]
