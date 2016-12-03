@@ -7,8 +7,7 @@ description: retina，像素，rem，高清屏中边框的1px问题
 ---
 
 
-​## 基本知识
----
+## 基本知识
 
 * 设备像素（物理像素）
 	* 显示器最小的物理显示单元。每个像素有自己的颜色、亮度。
@@ -28,7 +27,7 @@ description: retina，像素，rem，高清屏中边框的1px问题
 		* css: `-webkit-device-pixel-ratio`，`-webkit-min-device-pixel-ratio`，`-webkit-max-device-pixel-ratio`,对不同 dpr 的设备做样式适配
 
 ## 图片显示问题
----
+
 物理像素=图片像素，才会清晰。
 问题：非 retina 屏幕，用 200*400 的图片去填 100*200 的<img>，会因为下采样而导致色差，不够锐利，而且浪费像素。retina屏幕，用 100*200 的图片去填 100*200 的<img>，一个图片像素要分布到四个物理像素上，会导致模糊。
 解决：不同dpr下，加载不同尺寸的图片。使用 url 后缀实现。非 retina：用css像素大小的图片，retina：图片大小为物理像素大小（ css 像素大小*dpr），所以视觉稿画布得是屏幕宽的两倍哦！
@@ -74,6 +73,7 @@ description: retina，像素，rem，高清屏中边框的1px问题
 	* 但是不适合复杂图形
 
 ## image-set
+
 * image-set 是 CSS4 中对background-image属性定义的一种新方法
 * 原理：Webkit内核"safari6"和“chrome21”支持CSS4的background-image新规范草案image-set。通过Webkit内核的浏览器私有属性“-webkit”，image-set为Web前端人员提供了一种解决高分辨率图像的显示，用来解决苹果公司提出的Retian屏幕显示图片的技术问题。简而言之：这个属性用来支持Web前端人员解决不同分辨率下图片的显示，特别的（Retina屏幕）。
 * 缺点： 仅支持background-image属性，而不能使用在 `<img>` 标签中。
@@ -89,7 +89,7 @@ description: retina，像素，rem，高清屏中边框的1px问题
 ```
 
 ## 边框问题
----
+
 
 > 设计师要求的 1px 是一个物理像素。
 
@@ -189,7 +189,7 @@ font-size: 16px;
 ```
 
 ## 多屏适配布局
----
+
 rem 方案：根据手机的屏幕尺寸、dpr动态地改变 html 的 font-size 大小（基准值）
 宽度分成 100a，1 rem = 10a，所以基准值 1rem = 宽度上的物理像素 / 10
 
@@ -278,15 +278,15 @@ rem = px / 基准值 = 10 * px/document.documentElement.clientWidth * dpr。
 ```
 
 ## 工具
----
+
 * retina.js(还没研究-- todo)
 
 ## 如何让网站适应 retina 屏幕
----
+
 Retina web（？？忘了这哪来的 todo）
 
 ## 参考
----
+
 1. [image-set实现Retina屏幕下图片显示](http://www.w3cplus.com/css/safari-6-and-chrome-21-add-image-set-to-support-retina-images.html)
 2. [走向视网膜（Retina）的Web时代](http://www.w3cplus.com/css/towards-retina-web.html)
 3. [Retina Display Media Query](https://css-tricks.com/snippets/css/retina-display-media-query/)
