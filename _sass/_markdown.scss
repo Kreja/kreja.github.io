@@ -239,5 +239,8 @@
     background-color: #f1ede4;
     content: "Code"
   }
+  .highlight .highlight:after{
+    display: none;
+  }
 
 }

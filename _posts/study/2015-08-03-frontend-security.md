@@ -20,7 +20,7 @@ description: xss、csrf的攻击和防御
 	* 查询参数攻击：`<a href="/show?user=<%= userId %>">...</a>`，输入是：`{ userId: "42&user=666” }`，所以服务器收到 https://example.com/show?user=42&user=666 ，那么 user 666 的用户信息可能被泄露了。解决：转义，不安全的字符转成 %xx 类型的 utf-8 字节，如 &转成%26。
 	* js 变量攻击：
 
-		```html
+		```
 		<script>	
 			var foo = <%- someJSON %>;
 		</script>
