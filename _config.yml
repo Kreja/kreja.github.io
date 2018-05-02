@@ -13,7 +13,7 @@ paginate_path: "page:num"
 markdown: redcarpet
 redcarpet:
   extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "strikethrough", "superscript", "with_toc_data"]
-highlighter: pygments
+highlighter: pygments.rb
 
 kramdown:
   input: GFM
@@ -21,9 +21,6 @@ kramdown:
 # contacts
 email: kellywang.ok@gmail.com
 github_username:  kreja
-twitter_username: krejaone
-# weibo_username: blusblue
-# douban_username: betterdigtwo
 address: Hangzhou, Zhejiang, China
 address_link: http://en.wikipedia.org/wiki/Hangzhou
 
